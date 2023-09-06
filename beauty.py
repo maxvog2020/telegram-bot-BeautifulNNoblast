@@ -14,34 +14,31 @@ import urllib
 TOKEN = config.bot_token.get_secret_value()
 CHAT_ID = config.chat_id.get_secret_value()
 MODER = config.moder.get_secret_value()
-WEB_PREFIX = "https://maxvog2020.github.io/telegram-bot-NNNedviga/web"
+WEB_PREFIX = "https://maxvog2020.github.io/telegram-bot-BeautifulNNoblast/web"
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=TOKEN)
 dp = Dispatcher(fsm_strategy=FSMStrategy.USER_IN_CHAT)
 
 #########################
-async def sell_callback(message: Message, values):
+async def looking_callback(message: Message, values):
     data = values['json_data']
 
-    name = data['name'].strip()
+    type = data['type'].strip()
     description = data['description'].strip()
     price = data['price'].strip()
     address = data['address'].strip()
     contacts = data['contacts'].strip()
-    maps = data['maps']
     telegram = data['telegram']
 
-    text = f'#Продам\n\n🆕 <b>{name}</b> 🆕\n\n'
+    text = f'#ищу_мастера \n\n💁🏻‍♀️ <b>{type}</b>\n\n'
 
-    if address != "" and maps:
-        address = get_address_ref(address)
     if address != "":
         text += f'🏢 {address}\n\n'
+    if price != "":
+        text += f'💵 {price}\n\n'
     if description != "":
         text += f'ℹ {description}\n\n'
-    if price != "":
-        text += f'💸 {price}\n\n'
     if telegram or contacts != "":
         text += f'👤 {contacts}'
     if telegram and contacts != "":
@@ -49,109 +46,17 @@ async def sell_callback(message: Message, values):
     if telegram:
         text += get_telegram_ref(message)
 
-    await send_with_images(CHAT_ID, text, values.get('images'))
-    await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), values.get('images'))
+    await send_with_images(CHAT_ID, text, [])
+    await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), [])
     
-async def lease_callback(message: Message, values):
-    data = values['json_data']
-
-    name = data['name'].strip()
-    description = data['description'].strip()
-    price = data['price'].strip()
-    address = data['address'].strip()
-    contacts = data['contacts'].strip()
-    maps = data['maps']
-    telegram = data['telegram']
-
-    text = f'#Сдам\n\n🆕<b>{name}</b> 🆕\n\n'
-
-    if address != "" and maps:
-        address = get_address_ref(address)
-    if address != "":
-        text += f'🏢 {address}\n\n'
-    if description != "":
-        text += f'ℹ {description}\n\n'
-    if price != "":
-        text += f'💸 {price}\n\n'
-    if telegram or contacts != "":
-        text += f'👤 {contacts}'
-    if telegram and contacts != "":
-        text += f', '
-    if telegram:
-        text += get_telegram_ref(message)
-
-    await send_with_images(CHAT_ID, text, values.get('images'))
-    await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), values.get('images'))
-
-async def buy_callback(message: Message, values):
-    data = values['json_data']
-
-    name = data['name'].strip()
-    description = data['description'].strip()
-    price = data['price'].strip()
-    address = data['address'].strip()
-    contacts = data['contacts'].strip()
-    telegram = data['telegram']
-
-    text = f'#Куплю\n\n🆕<b>{name}</b> 🆕\n\n'
-
-    if address != "":
-        text += f'🏢 {address}\n\n'
-    if description != "":
-        text += f'ℹ {description}\n\n'
-    if price != "":
-        text += f'💸 {price}\n\n'
-    if telegram or contacts != "":
-        text += f'👤 {contacts}'
-    if telegram and contacts != "":
-        text += f', '
-    if telegram:
-        text += get_telegram_ref(message)
-
-    await send_with_images(CHAT_ID, text, [])
-    await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), [])
-
-async def rent_callback(message: Message, values):
-    data = values['json_data']
-
-    name = data['name'].strip()
-    description = data['description'].strip()
-    price = data['price'].strip()
-    address = data['address'].strip()
-    contacts = data['contacts'].strip()
-    telegram = data['telegram']
-
-    text = f'#Сниму\n\n🆕<b>{name}</b> 🆕\n\n'
-
-    if address != "":
-        text += f'🏢 {address}\n\n'
-    if description != "":
-        text += f'ℹ {description}\n\n'
-    if price != "":
-        text += f'💸 {price}\n\n'
-    if telegram or contacts != "":
-        text += f'👤 {contacts}'
-    if telegram and contacts != "":
-        text += f', '
-    if telegram:
-        text += get_telegram_ref(message)
-
-    await send_with_images(CHAT_ID, text, [])
-    await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), [])
 
 callbacks = {
-    "sell": sell_callback,
-    "lease": lease_callback,
-    "buy": buy_callback,
-    "rent": rent_callback,
+    "looking": looking_callback,
 }
 
 #########################
 def get_telegram_ref(message: Message):
     return f'<a href="tg://user?id={message.from_user.id}">{message.from_user.full_name}</a>'
-
-def get_address_ref(str: str):
-    return f'<a href="https://yandex.com/maps?text={urllib.parse.quote("Нижегородская область, " + str)}">{str}</a>'
 
 async def send_with_images(chat_id, text, images):
     if images == [] or images == None:
@@ -240,10 +145,7 @@ async def on_start(message: Message):
         return
 
     markup = InlineKeyboardBuilder()
-    markup.row(InlineKeyboardButton(text="Продам", callback_data="/sell"))
-    markup.row(InlineKeyboardButton(text="Сдам", callback_data="/lease"))
-    markup.row(InlineKeyboardButton(text="Куплю", callback_data="/buy"))
-    markup.row(InlineKeyboardButton(text="Сниму", callback_data="/rent"))
+    markup.row(InlineKeyboardButton(text="• Ищу мастера", callback_data="/looking"))
 
     await message.answer("<b>➡️ Меню ⬅️</b>", reply_markup=markup.as_markup(), parse_mode="HTML")
     await message.delete()

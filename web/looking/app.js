@@ -8,8 +8,8 @@ let reader = new FileReader();
 const COLOR_GREEN = "text-green-500";
 const COLOR_RED = "text-red-500";
 const DEPENDENT_COUNTERS = [
-    ['name', 128, true],
-    ['address', 128, true],
+    ['type', 128, true],
+    ['address', 128, false],
     ['description', 512, false],
     ['price', 64, false],
     ['contacts', 128, false],
@@ -60,35 +60,16 @@ window.onload = () => {
         tag.oninput = oninput;
     });
 
-    let tag = document.getElementById('image_count');
-    let text = document.getElementById('image_count_text');
-
-    let onchange = () => {
-        let value = tag.value;
-        text.innerText = `${value}/5`;
-
-        if (value == 0) {
-            main_button.text = "Опубликовать";
-        } else {
-            main_button.text = "Приложить фотографии и опубликовать";
-        }
-    };
-
-    onchange();
-    tag.onchange = onchange;
-
 
     main_button.onClick(() => {
         let data = {
-            name: document.getElementById('name').value,
+            type: document.getElementById('type').value,
             description: document.getElementById('description').value,
             price: document.getElementById('price').value,
             address: document.getElementById('address').value,
             contacts: document.getElementById('contacts').value,
-            image_count: document.getElementById('image_count').value,
-            maps: document.getElementById('maps').checked,
             telegram: document.getElementById('telegram').checked,
-            callback: "sell",
+            callback: "looking",
         };
  
         tg.sendData(JSON.stringify(data));
@@ -97,6 +78,7 @@ window.onload = () => {
 
     tg.expand();
     tg.enableClosingConfirmation();
+    main_button.text = "Опубликовать";
     main_button.show();
 };
 
