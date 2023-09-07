@@ -48,10 +48,40 @@ async def looking_callback(message: Message, values):
 
     await send_with_images(CHAT_ID, text, [])
     await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), [])
+
+
+async def rent_callback(message: Message, values):
+    data = values['json_data']
+
+    type = data['type'].strip()
+    description = data['description'].strip()
+    price = data['price'].strip()
+    address = data['address'].strip()
+    contacts = data['contacts'].strip()
+    telegram = data['telegram']
+
+    text = f'#сниму_рабочее_место \n\n<em>Предназначение</em>\n💖 <b>{type}</b>\n\n'
+
+    if address != "":
+        text += f'<em>Примерный адрес</em>\n🏩 {address}\n\n'
+    if price != "":
+        text += f'<em>Ценовой диапазон</em>\n💵 {price}\n\n'
+    if description != "":
+        text += f'<em>Комментарий</em>\n💬 {description}\n\n'
+    if telegram or contacts != "":
+        text += f'<em>Контакты</em>\n👤 {contacts}'
+    if telegram and contacts != "":
+        text += f', '
+    if telegram:
+        text += get_telegram_ref(message)
+
+    await send_with_images(CHAT_ID, text, [])
+    await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), [])
     
 
 callbacks = {
     "looking": looking_callback,
+    "rent": rent_callback,
 }
 
 #########################
@@ -146,6 +176,7 @@ async def on_start(message: Message):
 
     markup = InlineKeyboardBuilder()
     markup.row(InlineKeyboardButton(text="Ищу мастера", callback_data="/looking"))
+    markup.row(InlineKeyboardButton(text="Сниму рабочее место", callback_data="/rent"))
 
     await message.answer("<b>➡️ Меню ⬅️</b>", reply_markup=markup.as_markup(), parse_mode="HTML")
     await message.delete()
