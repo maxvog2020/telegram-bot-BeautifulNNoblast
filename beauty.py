@@ -60,7 +60,7 @@ async def rent_callback(message: Message, values):
     contacts = data['contacts'].strip()
     telegram = data['telegram']
 
-    text = f'#сниму_рабочее_место \n\n<em>Предназначение</em>\n💖 <b>{type}</b>\n\n'
+    text = f'#сниму_рабочее_место \n\n<em>Предназначение</em>\n🤩 {type}\n\n'
 
     if address != "":
         text += f'<em>Примерный адрес</em>\n🏩 {address}\n\n'
