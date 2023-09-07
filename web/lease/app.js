@@ -15,14 +15,6 @@ const DEPENDENT_COUNTERS = [
     ['contacts', 128, false],
 ];
 
-function toggleBlock() {
-    let reds = document.getElementsByClassName(COLOR_RED);
-    if (reds.length > 0) {
-        main_button.disable();
-    } else {
-        main_button.enable();
-    }
-}
 
 function toggle(cond, count) {
     if (cond) {
@@ -32,14 +24,10 @@ function toggle(cond, count) {
         count.classList.add(COLOR_RED);
         count.classList.remove(COLOR_GREEN);
     }
-
-    toggleBlock();
 }
 
 
 window.onload = () => {
-    toggleBlock();
-
     DEPENDENT_COUNTERS.forEach(item => {
         let [name, max_len, req] = item;
 
@@ -79,6 +67,12 @@ window.onload = () => {
 
 
     main_button.onClick(() => {
+        let reds = document.getElementsByClassName(COLOR_RED);
+        if (reds.length > 0) {
+            tg.showAlert('Заполните все поля правильно!');
+            return;
+        }
+
         let data = {
             type: document.getElementById('type').value,
             description: document.getElementById('description').value,
