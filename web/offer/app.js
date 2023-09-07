@@ -28,8 +28,6 @@ function toggle(cond, count) {
 
 
 window.onload = () => {
-    toggleBlock();
-
     DEPENDENT_COUNTERS.forEach(item => {
         let [name, max_len, req] = item;
 
