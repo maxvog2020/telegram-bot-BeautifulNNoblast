@@ -8,7 +8,7 @@ let reader = new FileReader();
 const COLOR_GREEN = "text-green-500";
 const COLOR_RED = "text-red-500";
 const DEPENDENT_COUNTERS = [
-    ['type', 128, true],
+    ['type', 128, false],
     ['address', 128, true],
     ['description', 512, false],
     ['price', 64, false],
