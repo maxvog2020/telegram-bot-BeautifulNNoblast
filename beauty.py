@@ -31,16 +31,16 @@ async def looking_callback(message: Message, values):
     contacts = data['contacts'].strip()
     telegram = data['telegram']
 
-    text = f'#ищу_мастера \n\n💁🏻‍♀️ <b>{type}</b>\n\n'
+    text = f'#ищу_мастера \n\n<em>Тип мастера</em>\n💖 <b>{type}</b>\n\n'
 
     if address != "":
-        text += f'🏢 {address}\n\n'
+        text += f'<em>Примерный адрес</em>\n🏩 {address}\n\n'
     if price != "":
-        text += f'💵 {price}\n\n'
+        text += f'<em>Ценовой диапазон</em>\n💵 {price}\n\n'
     if description != "":
-        text += f'ℹ {description}\n\n'
+        text += f'<em>Комментарий</em>\n💬 {description}\n\n'
     if telegram or contacts != "":
-        text += f'👤 {contacts}'
+        text += f'<em>Контакты</em>\n👤 {contacts}'
     if telegram and contacts != "":
         text += f', '
     if telegram:
@@ -145,7 +145,7 @@ async def on_start(message: Message):
         return
 
     markup = InlineKeyboardBuilder()
-    markup.row(InlineKeyboardButton(text="• Ищу мастера", callback_data="/looking"))
+    markup.row(InlineKeyboardButton(text="Ищу мастера", callback_data="/looking"))
 
     await message.answer("<b>➡️ Меню ⬅️</b>", reply_markup=markup.as_markup(), parse_mode="HTML")
     await message.delete()
