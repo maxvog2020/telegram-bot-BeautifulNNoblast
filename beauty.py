@@ -61,7 +61,7 @@ async def offer_callback(message: Message, values):
     telegram = data['telegram']
     maps = data['maps']
 
-    text = f'#предлагаю_услуги \n\n<em>Тип мастера</em>\n {type}\n\n'
+    text = f'#предлагаю_услуги \n\n<em>Тип мастера</em>\n💖 {type}\n\n'
 
     if maps:
         address = get_address_ref(address)
