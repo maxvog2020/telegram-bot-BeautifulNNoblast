@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>"Сдам рабочее место"</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div class="subbody min-h-screen p-6 flex items-center justify-center">
+        <div class="container max-w-screen-lg mx-auto">
+            <div class="rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+                <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+                    <div class="md:col-span-5">
+                        <label for="address">Адрес</label>
+                        <input type="text" name="address" id="address" class="h-10 border mt-1 rounded px-4 w-full"
+                            value="" placeholder="Нижний Новгород, Сормовский район" />
+                        <span class="text-sm text-green-500 flex justify-end" id="address_count">?/?</span>
+                    </div>
+
+                    <div class="md:col-span-5">
+                        <div class="inline-flex items-center">
+                            <input type="checkbox" name="maps" id="maps" class="form-checkbox" />
+                            <label for="maps" class="ml-2">Прикрепить ссылку на Яндекс.Карты</label>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-5 mt-8">
+                        <label for="type">Для кого</label>
+                        <input type="text" name="type" id="type" class="h-10 border mt-1 rounded px-4 w-full" value=""
+                            placeholder="Для мастера маникюра" />
+                        <span class="text-sm text-green-500 flex justify-end" id="type_count">?/?</span>
+                    </div>
+
+                    <div class="md:col-span-5">
+                        <label for="price">Цена</label>
+                        <input type="text" name="price" id="price" class="h-10 border mt-1 rounded px-4 w-full"
+                            value="" placeholder="20000 рублей в месяц" />
+                        <span class="text-sm text-green-500 flex justify-end" id="price_count">?/?</span>
+                    </div>
+
+                    <div class="md:col-span-5">
+                        <label for="description">Комментарий</label>
+                        <textarea name="description" id="description" rows="4"
+                            class="block border p-2.5 w-full text-sm rounded-lg" value=""
+                            placeholder="Просторное светлое помещение"></textarea>
+                        <span class="text-sm text-green-500 flex justify-end" id="description_count">?/?</span>
+                    </div>
+
+                    <div class="md:col-span-5">
+                        <label for="contacts">Контакты</label>
+                        <input type="text" name="contacts" id="contacts" class="h-10 border mt-1 rounded px-4 w-full"
+                            value="" placeholder="+79200451778" />
+                        <span class="text-sm text-green-500 flex justify-end" id="contacts_count">?/?</span>
+                    </div>
+
+                    <div class="md:col-span-5">
+                        <div class="inline-flex items-center">
+                            <input type="checkbox" name="telegram" id="telegram" class="form-checkbox" />
+                            <label for="telegram" class="ml-2">Прикрепить ссылку на мой аккаунт Telegram</label>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-5 mt-8">
+                        <label for="image_count">Количество фотографий</label>
+                        <input type="range" min="0" max="5" value="0" name="image_count" id="image_count"
+                            class="h-10 border rounded w-full" />
+                        <span class="text-sm text-green-500 flex justify-end" id="image_count_text">0/5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

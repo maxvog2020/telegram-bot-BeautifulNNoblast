@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    padding: 0;
+    color: var(--tg-theme-text-color);
+    background-color: var(--tg-theme-bg-color);
+}
+
+input, textarea, select {
+    color: var(--tg-theme-text-color);
+    background-color: var(--tg-theme-bg-color);
+}
+
+#image_count {
+    color: var(--tg-theme-button-color);
+    background-color: var(--tg-theme-button-color);
+    accent-color: var(--tg-theme-button-color);
+}
+
+.subbody {
+    background-color: var(--tg-theme-secondary-bg-color);
+}
+

@@ -36,7 +36,7 @@ async def looking_callback(message: Message, values):
     if address != "":
         text += f'<em>Примерный адрес</em>\n🏩 {address}\n\n'
     if price != "":
-        text += f'<em>Ценовой диапазон</em>\n💵 {price}\n\n'
+        text += f'<em>Ценовой диапазон</em>\n👛 {price}\n\n'
     if description != "":
         text += f'<em>Комментарий</em>\n💬 {description}\n\n'
     if telegram or contacts != "":
@@ -60,12 +60,44 @@ async def rent_callback(message: Message, values):
     contacts = data['contacts'].strip()
     telegram = data['telegram']
 
-    text = f'#сниму_рабочее_место \n\n<em>Предназначение</em>\n🤩 {type}\n\n'
+    text = f'#сниму_рабочее_место \n\n<em>Предназначение</em>\n🎀 {type}\n\n'
 
     if address != "":
         text += f'<em>Примерный адрес</em>\n🏩 {address}\n\n'
     if price != "":
-        text += f'<em>Ценовой диапазон</em>\n💵 {price}\n\n'
+        text += f'<em>Ценовой диапазон</em>\n👛 {price}\n\n'
+    if description != "":
+        text += f'<em>Комментарий</em>\n💬 {description}\n\n'
+    if telegram or contacts != "":
+        text += f'<em>Контакты</em>\n👤 {contacts}'
+    if telegram and contacts != "":
+        text += f', '
+    if telegram:
+        text += get_telegram_ref(message)
+
+    await send_with_images(CHAT_ID, text, [])
+    await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), [])
+    
+
+async def lease_callback(message: Message, values):
+    data = values['json_data']
+
+    type = data['type'].strip()
+    description = data['description'].strip()
+    price = data['price'].strip()
+    address = data['address'].strip()
+    contacts = data['contacts'].strip()
+    telegram = data['telegram']
+    maps = data['maps']
+
+    if maps:
+        address = get_address_ref(address)
+    text = f'#сниму_рабочее_место \n\n<em>Адрес</em>\n🏩 {address}\n\n'
+
+    if type != "":
+        text += f'<em>Для кого</em>\n🤔 {type}\n\n'
+    if price != "":
+        text += f'<em>Цена</em>\n👛 {price}\n\n'
     if description != "":
         text += f'<em>Комментарий</em>\n💬 {description}\n\n'
     if telegram or contacts != "":
@@ -82,11 +114,15 @@ async def rent_callback(message: Message, values):
 callbacks = {
     "looking": looking_callback,
     "rent": rent_callback,
+    "lease": lease_callback,
 }
 
 #########################
 def get_telegram_ref(message: Message):
     return f'<a href="tg://user?id={message.from_user.id}">{message.from_user.full_name}</a>'
+
+def get_address_ref(str: str):
+    return f'<a href="https://yandex.com/maps?text={urllib.parse.quote("Нижегородская область, " + str)}">{str}</a>'
 
 async def send_with_images(chat_id, text, images):
     if images == [] or images == None:
@@ -177,6 +213,7 @@ async def on_start(message: Message):
     markup = InlineKeyboardBuilder()
     markup.row(InlineKeyboardButton(text="Ищу мастера", callback_data="/looking"))
     markup.row(InlineKeyboardButton(text="Сниму рабочее место", callback_data="/rent"))
+    markup.row(InlineKeyboardButton(text="Сдам рабочее место", callback_data="/lease"))
 
     await message.answer("<b>➡️ Меню ⬅️</b>", reply_markup=markup.as_markup(), parse_mode="HTML")
     await message.delete()
