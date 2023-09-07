@@ -145,6 +145,7 @@ async def lease_callback(message: Message, values):
 
 callbacks = {
     "looking": looking_callback,
+    "offer": offer_callback,
     "rent": rent_callback,
     "lease": lease_callback,
 }
