@@ -93,7 +93,6 @@ window.onload = () => {
 
     tg.expand();
     tg.enableClosingConfirmation();
-    main_button.text = "Опубликовать";
     main_button.show();
 };
 

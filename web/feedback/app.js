@@ -48,24 +48,6 @@ window.onload = () => {
         tag.oninput = oninput;
     });
 
-    let tag = document.getElementById('image_count');
-    let text = document.getElementById('image_count_text');
-
-    let onchange = () => {
-        let value = tag.value;
-        text.innerText = `${value}/5`;
-
-        if (value == 0) {
-            main_button.text = "Опубликовать";
-        } else {
-            main_button.text = "Приложить фотографии и опубликовать";
-        }
-    };
-
-    onchange();
-    tag.onchange = onchange;
-
-
     main_button.onClick(() => {
         let reds = document.getElementsByClassName(COLOR_RED);
         if (reds.length > 0) {
