@@ -63,7 +63,7 @@ async def offer_callback(message: Message, values):
 
     text = f'#предлагаю_услуги \n\n<em>Тип мастера</em>\n💖 {type}\n\n'
 
-    if maps:
+    if maps and address != "":
         address = get_address_ref(address)
     if address != "":
         text += f'<em>Адрес</em>\n🏩 {address}\n\n'
@@ -142,12 +142,35 @@ async def lease_callback(message: Message, values):
     await send_with_images(CHAT_ID, text, values.get('images'))
     await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), values.get('images'))
     
+async def feedback_callback(message: Message, values):
+    data = values['json_data']
+
+    who = data['who'].strip()
+    description = data['description'].strip()
+    contacts = data['contacts'].strip()
+    telegram = data['telegram']
+
+    text = f'#отзыв \n\n<em>Про кого отзыв</em>\n🤔 <b>{who}</b>\n\n'
+
+    if description != "":
+        text += f'<em>Комментарий</em>\n💬 {description}\n\n'
+    if telegram or contacts != "":
+        text += f'<em>Контакты</em>\n👤 {contacts}'
+    if telegram and contacts != "":
+        text += f', '
+    if telegram:
+        text += get_telegram_ref(message)
+
+    await send_with_images(CHAT_ID, text, [])
+    await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), [])
+
 
 callbacks = {
     "looking": looking_callback,
     "offer": offer_callback,
     "rent": rent_callback,
     "lease": lease_callback,
+    "feedback": feedback_callback,
 }
 
 #########################
@@ -261,6 +284,7 @@ async def get_menu(message: Message):
     markup.row(InlineKeyboardButton(text="Предлагаю услуги", callback_data="/offer"))
     markup.row(InlineKeyboardButton(text="Сниму рабочее место", callback_data="/rent"))
     markup.row(InlineKeyboardButton(text="Сдам рабочее место", callback_data="/lease"))
+    markup.row(InlineKeyboardButton(text="Оставить отзыв", callback_data="/feedback"))
 
     await message.answer("<b>☰ Меню</b>", reply_markup=markup.as_markup(), parse_mode="HTML")
 
