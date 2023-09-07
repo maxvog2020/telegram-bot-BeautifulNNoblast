@@ -49,7 +49,7 @@ window.onload = () => {
     main_button.onClick(() => {
         let reds = document.getElementsByClassName(COLOR_RED);
         if (reds.length > 0) {
-            tg.showAlert('Заполните все поля правильно!', callback);
+            tg.showAlert('Заполните все поля правильно!');
             return;
         }
 

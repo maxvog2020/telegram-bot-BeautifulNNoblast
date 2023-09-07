@@ -150,7 +150,7 @@ async def feedback_callback(message: Message, values):
     contacts = data['contacts'].strip()
     telegram = data['telegram']
 
-    text = f'#отзыв \n\n<em>Про кого отзыв</em>\n🤔 <b>{who}</b>\n\n'
+    text = f'#отзыв \n\n<em>Про кого отзыв</em>\n🤔 {who}\n\n'
 
     if description != "":
         text += f'<em>Комментарий</em>\n💬 {description}\n\n'
