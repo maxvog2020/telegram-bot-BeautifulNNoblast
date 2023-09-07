@@ -88,7 +88,7 @@ window.onload = () => {
             image_count: document.getElementById('image_count').value,
             maps: document.getElementById('maps').checked,
             telegram: document.getElementById('telegram').checked,
-            callback: "lease",
+            callback: "offer",
         };
  
         tg.sendData(JSON.stringify(data));
