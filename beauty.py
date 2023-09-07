@@ -247,7 +247,7 @@ async def on_get_data(message: Message, state: FSMContext):
 
 
 @dp.callback_query()
-async def on_callbacks(callback: CallbackQuery, state: FSMContext):
+async def on_callbacks(callback: CallbackQuery):
     url = WEB_PREFIX + callback.data
 
     markup = ReplyKeyboardBuilder()
@@ -257,7 +257,7 @@ async def on_callbacks(callback: CallbackQuery, state: FSMContext):
 
     await callback.message.delete()
     await callback.answer()
-    await asyncio.sleep(3)
+    await asyncio.sleep(5)
     await message.delete()
     await get_menu(message)
 
