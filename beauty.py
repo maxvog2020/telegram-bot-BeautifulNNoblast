@@ -248,16 +248,8 @@ async def on_get_data(message: Message, state: FSMContext):
 
 @dp.callback_query()
 async def on_callbacks(callback: CallbackQuery):
-    url = WEB_PREFIX + callback.data
-
-    markup = ReplyKeyboardBuilder()
-    markup.add(KeyboardButton(text="Перейти в форму", web_app=WebAppInfo(url=url)))
-
-    message = await callback.message.answer(text="Нажмите на кнопку для перехода в форму", reply_markup=markup.as_markup())
-
+    await callback.message.answer("Удалите переписку с этим ботом и начните заново")
     await callback.answer()
-    await asyncio.sleep(5)
-    await message.delete()
 
 @dp.message(Command("start"))
 async def on_start(message: Message):
@@ -266,25 +258,30 @@ async def on_start(message: Message):
         await message.delete()
         return
 
-    await get_menu(message)
+    await get_init_message(message)
+    await message.delete()
+
+@dp.message(Command(*callbacks))
+async def on_command(message: Message):
+    await message.delete()
+    url = WEB_PREFIX + message.text
+
+    markup = ReplyKeyboardBuilder()
+    markup.add(KeyboardButton(text="👉 Перейти в форму", web_app=WebAppInfo(url=url)))
+
+    message = await message.answer(text="Нажмите на кнопку для перехода в форму 👇", reply_markup=markup.as_markup())
+    await asyncio.sleep(5)
     await message.delete()
 
 @dp.message()
 async def delete_everything_else(message: Message):
     await message.delete()
-    message = await message.answer("Взаимодействуйте с <b>меню</b>!\n\nЕсли его нет, <b>удалите переписку с этим ботом и начните заново</b>", parse_mode="HTML")
-    await asyncio.sleep(7)
+    message = await get_init_message(message)
+    await asyncio.sleep(5)
     await message.delete()
 
-async def get_menu(message: Message):
-    markup = InlineKeyboardBuilder()
-    markup.row(InlineKeyboardButton(text="Ищу мастера", callback_data="/looking"))
-    markup.row(InlineKeyboardButton(text="Предлагаю услуги", callback_data="/offer"))
-    markup.row(InlineKeyboardButton(text="Сниму рабочее место", callback_data="/rent"))
-    markup.row(InlineKeyboardButton(text="Сдам рабочее место", callback_data="/lease"))
-    markup.row(InlineKeyboardButton(text="Оставить отзыв", callback_data="/feedback"))
-
-    await message.answer("<b>☰ Меню</b>", reply_markup=markup.as_markup(), parse_mode="HTML")
+async def get_init_message(message: Message):
+    return await message.answer("Для того, чтобы опубликовать объявление, используйте <b>меню</b>!", parse_mode="HTML")
 
 #########################
 async def main():
