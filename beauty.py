@@ -1,3 +1,4 @@
+import html
 from config import config
 import asyncio
 import logging
@@ -31,16 +32,16 @@ async def looking_callback(message: Message, values):
     contacts = data['contacts'].strip()
     telegram = data['telegram']
 
-    text = f'#ищу_мастера \n\n<em>Тип мастера</em>\n💖 <b>{type}</b>\n\n'
+    text = f'#ищу_мастера \n\n<em>Тип мастера</em>\n💖 <b>{html.escape(type)}</b>\n\n'
 
     if address != "":
-        text += f'<em>Примерный адрес</em>\n🏩 {address}\n\n'
+        text += f'<em>Примерный адрес</em>\n🏩 {html.escape(address)}\n\n'
     if price != "":
-        text += f'<em>Ценовой диапазон</em>\n👛 {price}\n\n'
+        text += f'<em>Ценовой диапазон</em>\n👛 {html.escape(price)}\n\n'
     if description != "":
-        text += f'<em>Комментарий</em>\n💬 {description}\n\n'
+        text += f'<em>Комментарий</em>\n💬 {html.escape(description)}\n\n'
     if telegram or contacts != "":
-        text += f'<em>Контакты</em>\n👤 {contacts}'
+        text += f'<em>Контакты</em>\n👤 {html.escape(contacts)}'
     if telegram and contacts != "":
         text += f', '
     if telegram:
@@ -61,18 +62,18 @@ async def offer_callback(message: Message, values):
     telegram = data['telegram']
     maps = data['maps']
 
-    text = f'#предлагаю_услуги \n\n<em>Тип мастера</em>\n💖 {type}\n\n'
+    text = f'#предлагаю_услуги \n\n<em>Тип мастера</em>\n💖 {html.escape(type)}\n\n'
 
-    if maps and address != "":
-        address = get_address_ref(address)
-    if address != "":
-        text += f'<em>Адрес</em>\n🏩 {address}\n\n'
+    if address != "" and maps:
+        text += f'<em>Адрес</em>\n🏩 {get_address_ref(address)}\n\n'
+    if address != "" and not maps:
+        text += f'<em>Адрес</em>\n🏩 {html.escape(address)}\n\n'
     if price != "":
-        text += f'<em>Цена</em>\n👛 {price}\n\n'
+        text += f'<em>Цена</em>\n👛 {html.escape(price)}\n\n'
     if description != "":
-        text += f'<em>Комментарий</em>\n💬 {description}\n\n'
+        text += f'<em>Комментарий</em>\n💬 {html.escape(description)}\n\n'
     if telegram or contacts != "":
-        text += f'<em>Контакты</em>\n👤 {contacts}'
+        text += f'<em>Контакты</em>\n👤 {html.escape(contacts)}'
     if telegram and contacts != "":
         text += f', '
     if telegram:
@@ -92,16 +93,16 @@ async def rent_callback(message: Message, values):
     contacts = data['contacts'].strip()
     telegram = data['telegram']
 
-    text = f'#сниму_рабочее_место \n\n<em>Предназначение</em>\n🎀 {type}\n\n'
+    text = f'#сниму_рабочее_место \n\n<em>Предназначение</em>\n🎀 {html.escape(type)}\n\n'
 
     if address != "":
-        text += f'<em>Примерный адрес</em>\n🏩 {address}\n\n'
+        text += f'<em>Примерный адрес</em>\n🏩 {html.escape(address)}\n\n'
     if price != "":
-        text += f'<em>Ценовой диапазон</em>\n👛 {price}\n\n'
+        text += f'<em>Ценовой диапазон</em>\n👛 {html.escape(price)}\n\n'
     if description != "":
-        text += f'<em>Комментарий</em>\n💬 {description}\n\n'
+        text += f'<em>Комментарий</em>\n💬 {html.escape(description)}\n\n'
     if telegram or contacts != "":
-        text += f'<em>Контакты</em>\n👤 {contacts}'
+        text += f'<em>Контакты</em>\n👤 {html.escape(contacts)}'
     if telegram and contacts != "":
         text += f', '
     if telegram:
@@ -122,18 +123,21 @@ async def lease_callback(message: Message, values):
     telegram = data['telegram']
     maps = data['maps']
 
-    if maps:
-        address = get_address_ref(address)
-    text = f'#сдам_рабочее_место \n\n<em>Адрес</em>\n🏩 {address}\n\n'
+    text = '#сдам_рабочее_место \n\n'
+
+    if address != "" and maps:
+        text += f'<em>Адрес</em>\n🏩 {get_address_ref(address)}\n\n'
+    if address != "" and not maps:
+        text += f'<em>Адрес</em>\n🏩 {html.escape(address)}\n\n'
 
     if type != "":
-        text += f'<em>Для кого</em>\n❤️‍🔥 {type}\n\n'
+        text += f'<em>Для кого</em>\n❤️‍🔥 {html.escape(type)}\n\n'
     if price != "":
-        text += f'<em>Цена</em>\n👛 {price}\n\n'
+        text += f'<em>Цена</em>\n👛 {html.escape(price)}\n\n'
     if description != "":
-        text += f'<em>Комментарий</em>\n💬 {description}\n\n'
+        text += f'<em>Комментарий</em>\n💬 {html.escape(description)}\n\n'
     if telegram or contacts != "":
-        text += f'<em>Контакты</em>\n👤 {contacts}'
+        text += f'<em>Контакты</em>\n👤 {html.escape(contacts)}'
     if telegram and contacts != "":
         text += f', '
     if telegram:
@@ -150,12 +154,12 @@ async def feedback_callback(message: Message, values):
     contacts = data['contacts'].strip()
     telegram = data['telegram']
 
-    text = f'#отзыв \n\n<em>Про кого отзыв</em>\n🤔 {who}\n\n'
+    text = f'#отзыв \n\n<em>Про кого отзыв</em>\n🤔 {html.escape(who)}\n\n'
 
     if description != "":
-        text += f'<em>Комментарий</em>\n💬 {description}\n\n'
+        text += f'<em>Комментарий</em>\n💬 {html.escape(description)}\n\n'
     if telegram or contacts != "":
-        text += f'<em>Контакты</em>\n👤 {contacts}'
+        text += f'<em>Контакты</em>\n👤 {html.escape(contacts)}'
     if telegram and contacts != "":
         text += f', '
     if telegram:
@@ -175,9 +179,11 @@ callbacks = {
 
 #########################
 def get_telegram_ref(message: Message):
-    return f'<a href="tg://user?id={message.from_user.id}">{message.from_user.full_name}</a>'
+    name = html.escape(message.from_user.full_name)
+    return f'<a href="tg://user?id={message.from_user.id}">{name}</a>'
 
 def get_address_ref(str: str):
+    str = html.escape(str)
     return f'<a href="https://yandex.com/maps?text={urllib.parse.quote("Нижегородская область, " + str)}">{str}</a>'
 
 async def send_with_images(chat_id, text, images):
