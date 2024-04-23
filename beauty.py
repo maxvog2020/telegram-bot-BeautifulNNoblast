@@ -50,31 +50,6 @@ async def looking_callback(message: Message, values):
     await send_with_images(CHAT_ID, text, [])
     await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), [])
 
-async def model_callback(message: Message, values):
-    data = values['json_data']
-
-    type = data['type'].strip()
-    description = data['description'].strip()
-    address = data['address'].strip()
-    contacts = data['contacts'].strip()
-    telegram = data['telegram']
-
-    text = f'#ищу_модель \n\n<em>Тип мастера</em>\n💖 <b>{html.escape(type)}</b>\n\n'
-
-    if address != "":
-        text += f'<em>Адрес</em>\n🏩 {html.escape(address)}\n\n'
-    if description != "":
-        text += f'<em>Комментарий</em>\n💬 {html.escape(description)}\n\n'
-    if telegram or contacts != "":
-        text += f'<em>Контакты</em>\n👤 {html.escape(contacts)}'
-    if telegram and contacts != "":
-        text += f', '
-    if telegram:
-        text += get_telegram_ref(message)
-
-    await send_with_images(CHAT_ID, text, [])
-    await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), [])
-
 
 async def offer_callback(message: Message, values):
     data = values['json_data']
@@ -193,6 +168,33 @@ async def feedback_callback(message: Message, values):
     await send_with_images(CHAT_ID, text, [])
     await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), [])
 
+async def model_callback(message: Message, values):
+    data = values['json_data']
+
+    type = data['type'].strip()
+    description = data['description'].strip()
+    address = data['address'].strip()
+    contacts = data['contacts'].strip()
+    telegram = data['telegram']
+    maps = data['maps']
+
+    text = f'#ищу_модель \n\n<em>Тип мастера</em>\n💖 <b>{html.escape(type)}</b>\n\n'
+
+    if address != "" and maps:
+        text += f'<em>Адрес</em>\n🏩 {get_address_ref(address)}\n\n'
+    if address != "" and not maps:
+        text += f'<em>Адрес</em>\n🏩 {html.escape(address)}\n\n'
+    if description != "":
+        text += f'<em>Комментарий</em>\n💬 {html.escape(description)}\n\n'
+    if telegram or contacts != "":
+        text += f'<em>Контакты</em>\n👤 {html.escape(contacts)}'
+    if telegram and contacts != "":
+        text += f', '
+    if telegram:
+        text += get_telegram_ref(message)
+
+    await send_with_images(CHAT_ID, text, values.get('images'))
+    await send_with_images(MODER, text + '\n\n\n<b>By</b> ' + get_telegram_ref(message), values.get('images'))
 
 callbacks = {
     "looking": looking_callback,

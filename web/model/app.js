@@ -9,7 +9,7 @@ const COLOR_GREEN = "text-green-500";
 const COLOR_RED = "text-red-500";
 const DEPENDENT_COUNTERS = [
     ['type', 128, true],
-    ['address', 128, false],
+    ['address', 128, true],
     ['description', 512, false],
     ['contacts', 128, false],
 ];
@@ -47,6 +47,23 @@ window.onload = () => {
         tag.oninput = oninput;
     });
 
+    let tag = document.getElementById('image_count');
+    let text = document.getElementById('image_count_text');
+
+    let onchange = () => {
+        let value = tag.value;
+        text.innerText = `${value}/5`;
+
+        if (value == 0) {
+            main_button.text = "Опубликовать";
+        } else {
+            main_button.text = "Приложить фотографии и опубликовать";
+        }
+    };
+
+    onchange();
+    tag.onchange = onchange;
+
 
     main_button.onClick(() => {
         let reds = document.getElementsByClassName(COLOR_RED);
@@ -60,8 +77,10 @@ window.onload = () => {
             description: document.getElementById('description').value,
             address: document.getElementById('address').value,
             contacts: document.getElementById('contacts').value,
+            image_count: document.getElementById('image_count').value,
+            maps: document.getElementById('maps').checked,
             telegram: document.getElementById('telegram').checked,
-            callback: "looking",
+            callback: "model",
         };
  
         tg.sendData(JSON.stringify(data));
@@ -70,7 +89,6 @@ window.onload = () => {
 
     tg.expand();
     tg.enableClosingConfirmation();
-    main_button.text = "Опубликовать";
     main_button.show();
 };
 
